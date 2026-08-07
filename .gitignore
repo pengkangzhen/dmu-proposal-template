@@ -1,0 +1,24 @@
+# LaTeX 中间文件
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.xdv
+*.toc
+*.lof
+*.lot
+*.idx
+*.ind
+*.ilg
+
+# 编译产出（如需提交 PDF 请删除此行）
+*.pdf
+
+# 系统文件
+.DS_Store

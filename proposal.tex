@@ -1,0 +1,657 @@
+% !TEX program = xelatex
+% !TEX encoding = UTF-8 Unicode
+%
+% 大连海事大学博士学位论文开题报告 — LaTeX 模板
+% 源文件：《博士研究生开题、中期、预答辩、答辩相关表格（2022年版）》之
+%        「1博士研究生学位论文开题报告.doc」
+% 引擎：XeLaTeX + ctexart + biblatex (gb7714-2015)
+% 使用说明见 README.md
+%
+% 字体规格（从原 .doc 二进制提取）：
+%   封面标题   宋体加粗 一号(26pt)
+%   封面信息   宋体加粗 三号(16pt)
+%   节标题     黑体     小四(12pt)
+%   小节标题   宋体     小四(12pt)
+%   正文       宋体     五号(10.5pt)
+%   提示语     楷体     五号(10.5pt)
+%   评分表     宋体     五号(10.5pt)
+%   每节外框   1.5px solid #BFBFBF 表格
+
+\documentclass[UTF8, a4paper, zihao=-4, fontset=mac]{ctexart}
+
+%==================== 宏包 ====================
+\usepackage[
+  top=2.5cm,
+  bottom=2.5cm,
+  left=3.0cm,     % 左侧留出装订余量
+  right=2.5cm,
+  headheight=14pt,
+  headsep=0.5cm,
+  footskip=1.0cm
+]{geometry}
+
+% 数学
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% 表格
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{makecell}
+
+% 图形
+\usepackage{graphicx}
+\usepackage{float}
+
+% 列表
+\usepackage{enumitem}
+
+% 颜色
+\usepackage{xcolor}
+
+% 可跨页带边框框体（还原 Word 模板每节的大表格外框）
+\usepackage[most]{tcolorbox}
+
+% 页眉页脚
+\usepackage{fancyhdr}
+
+% 参考文献：GB/T 7714-2015（国标，符合学校撰写规范）
+\usepackage[backend=biber, style=gb7714-2015]{biblatex}
+\addbibresource{references.bib}
+
+% 超链接（最后加载）
+\usepackage[
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=blue!50!black,
+  urlcolor=blue!60!black,
+  bookmarksnumbered=true,
+  pdfstartview=FitH,
+  pdftitle={博士学位论文开题报告},
+  pdfauthor={}
+]{hyperref}
+
+%==================== 排版参数 ====================
+\linespread{1.2}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{10pt plus 2pt minus 1pt}
+
+% macOS 宋体无独立粗体字重，ctex 默认将 \songti\bfseries 映射到黑体；
+% 此处覆盖为合成粗体（加粗笔画），使"加粗"表现为视觉粗体而非字体切换
+\setCJKfamilyfont{zhsong}{Songti SC}[AutoFakeBold=3]
+
+% 英文字体：Times New Roman
+\setmainfont{Times New Roman}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+%==================== 框体与标题命令 ====================
+
+% 每节的大框线表格（还原 Word 模板：1.5px solid #BFBFBF）
+% black!25 = rgb(191,191,191) = #BFBFBF
+\newtcolorbox{formbox}{%
+  breakable,
+  enhanced,
+  colback=white,
+  colframe=black!25,
+  boxrule=1pt,
+  arc=0pt,
+  outer arc=0pt,
+  left=10pt, right=10pt,
+  top=10pt, bottom=10pt,
+  before skip=4pt, after skip=10pt,
+  fontupper=\zihao{5}\songti,
+  before upper={\setlength{\parskip}{10pt plus 2pt minus 1pt}\setlength{\parindent}{2em}},
+}
+
+% 整页填写框：\clearpage 后自动撑满本页剩余高度，
+% 框内留出大片空白供打印后手写（用于第 8、9、12 节意见/评议栏）
+% 注意：height fill 与 breakable 互斥，此框不可跨页
+\newtcolorbox{formboxfull}{%
+  enhanced,
+  height fill,
+  valign=top,
+  colback=white,
+  colframe=black!25,
+  boxrule=1pt,
+  arc=0pt,
+  outer arc=0pt,
+  left=10pt, right=10pt,
+  top=10pt, bottom=10pt,
+  before skip=4pt, after skip=10pt,
+  fontupper=\zihao{5}\songti,
+  before upper={\setlength{\parskip}{10pt plus 2pt minus 1pt}\setlength{\parindent}{2em}},
+}
+
+% 节标题：黑体 小四（节号已硬编码，与学校模板一致）
+\newcommand{\formheading}[1]{%
+  \noindent{\heiti #1}\par\nobreak\vspace{2pt}%
+}
+
+% 小节标题：黑体 小四
+\newcommand{\formsubheading}[1]{%
+  \vspace{4pt}\noindent{\zihao{-4}\heiti #1}\par\nobreak\vspace{2pt}%
+}
+
+% 子小节标题（如 1.1、1.2）：宋体五号加粗
+\newcommand{\formsubsubheading}[1]{%
+  \vspace{4pt}\noindent{\zihao{5}\songti\bfseries #1}\par\nobreak\vspace{2pt}%
+}
+
+% 题目提示语：楷体 五号 灰色（原文括号中的填写说明）
+\newcommand{\topicnote}[1]{%
+  {\zihao{5}\kaishu\color{gray!50!black}#1\par\vspace{6pt}}%
+}
+
+% 空白填写区占位符（已禁用，不再产生空白；TODO 注释保留作参考）
+\newcommand{\writehere}[1][6cm]{}
+
+% 表单项标签（签名/勾选行）：黑体 五号，与正文宋体区分
+\newcommand{\formlabel}[1]{{\heiti #1}}
+
+%==================== 个人信息（提交前务必填写）====================
+\newcommand{\studentName}{姓名}
+\newcommand{\studentID}{学号}
+\newcommand{\schoolName}{学院名称}          % TODO: 核对学院全称
+\newcommand{\discipline}{学科专业}          % TODO: 核对学科名称
+\newcommand{\advisorName}{指导教师}         % TODO: 导师姓名
+\newcommand{\thesisTitle}{论文题目}         % TODO: 填写论文题目
+\newcommand{\proposalDate}{202X 年 X 月 X 日}  % TODO: 填写开题日期
+%==================================================================
+
+\begin{document}
+
+%==================================================
+%  封面（宋体加粗，字号按原模板）
+%==================================================
+\begin{titlepage}
+\linespread{1}\selectfont  % 封面用单倍行距，不受全局 1.2 影响
+\begin{center}
+\vspace*{2cm}
+
+{\zihao{1}\songti\bfseries 大连海事大学博士研究生}\\[16pt]
+{\zihao{1}\songti\bfseries 学位论文开题报告}
+\end{center}
+
+\vspace{3.5cm}
+
+% 信息表：按原 Word 模板缩进居中，值列用 p{} 允许长题目换行
+\noindent\hspace*{2.5cm}%
+\renewcommand{\arraystretch}{1.8}
+{\zihao{3}\songti\bfseries
+\begin{tabular}{r@{：}p{8.2cm}}
+  \makebox[4em][s]{姓\hfill 名} & \studentName \\
+  \makebox[4em][s]{学\hfill 号} & \studentID \\
+  \makebox[4em][s]{学\hfill 院} & \schoolName \\
+  \makebox[4em][s]{学\hfill 科} & \discipline \\
+  \makebox[4em][s]{指导教师}     & \advisorName \\
+  \makebox[4em][s]{论文题目}     & \thesisTitle \\
+  \makebox[4em][s]{开题时间}     & \proposalDate \\
+\end{tabular}}
+
+\vfill
+
+\begin{center}
+{\zihao{3}\songti\bfseries 大连海事大学研究生院制}\\[6pt]
+{\zihao{-4}\songti\bfseries 2021年4月}
+
+\vspace*{2cm}
+\end{center}
+\end{titlepage}
+
+%==================================================
+%  开题报告说明（不在框线内）
+%==================================================
+\begin{center}
+{\zihao{3}\heiti 博士研究生学位论文开题报告说明}
+\end{center}
+
+\vspace{6pt}
+
+{\fangsong
+博士学位论文开题报告是做好学位论文的基础，为了完善博士学位过程管理体系，提高博士学位质量，原则上应于第3学期结束前完成学位论文的开题工作。
+
+一、开题报告应在导师（组）指导下，由研究生本人完成。开题报告中文献综述应分类清楚，归纳合理，科学技术问题凝练准确，逻辑清晰，语句通顺，图表规范。字数不少于10000字（其中文献综述6000字左右）；近五年的参考文献不少于总数的1/3；参考文献的引用格式需符合《大连海事大学博士、硕士研究生学位论文撰写规范》的相关规定。严禁伪造和抄袭开题报告。
+
+二、博士生在查阅大量国内外文献资料的基础上，填写完成《博士研究生学位论文开题报告》，经导师审核同意后，应在本学科或相关学科范围内举行公开的学位论文开题报告会。
+
+三、开题报告会由博士生招生学科组织具体实施。开题报告考核小组负责填写结论性的审查意见，并将结果和相关材料留学院备案。开题报告考核小组由3～5名具有高级技术职称的相关学科专家组成，设组长和秘书各1名，组长必须由博士生导师担任，博士生导师人数不少于2/3，鼓励有条件的学科聘请1名外单位博士生导师作为成员。申请人的导师不能作为考核小组成员。同时，可邀请本专业领域的教师和学生参加，听取多方面意见。
+
+四、《博士研究生学位论文开题报告》必须采用A4纸双面打印，左侧装订成册，各栏空格不够时，请自行加页。本表可在研究生院网站下载。
+}
+
+\clearpage
+
+%==================================================
+%  1、学位论文选题背景、研究目的和意义
+%==================================================
+\formheading{1、学位论文选题背景、研究目的和意义}
+\begin{formbox}
+
+\formsubheading{（1）选题的科学依据，提出将要研究的科学或技术问题}
+
+% TODO: 阐述选题背景，建议按以下结构展开：
+%   1.1 宏观背景（行业/领域面临的形势与挑战）
+%   1.2 具体问题（聚焦到本研究关注的核心矛盾）
+%   1.3 现实需求（为什么需要研究这个问题）
+% 可使用 \formsubsubheading{1.1 标题} 创建子标题
+
+\writehere[6cm]
+
+\formsubheading{（2）研究目的，选题的理论意义或实际应用价值}
+
+% TODO: 阐明研究目的、理论意义和实际应用价值
+
+\writehere[6cm]
+\end{formbox}
+
+\clearpage
+
+%==================================================
+%  2、文献综述（不少于 6000 字）
+%==================================================
+\formheading{2、文献综述（不少于6000字）}
+\begin{formbox}
+
+\topicnote{围绕研究方向，通过有效的文献检索和大量文献阅读，运用科学分类和归纳方法，总结分析国内外的研究现状与发展趋势，凝练存在的科学或技术问题，列出主要参考文献（近五年的参考文献不少于总数的1/3）。}
+
+% TODO: 按研究方向分 2~4 个主题展开文献综述，每个主题用 \formsubsubheading{} 标题
+% 建议：
+%   2.1 核心概念与理论基础
+%   2.2 主要研究方法与进展
+%   2.3 研究现状评述与不足（引出本研究的切入点）
+% 正文中用 \cite{citekey} 或 \parencite{citekey} 引用参考文献
+
+\formsubsubheading{2.1 主题一}
+
+% TODO: 文献综述内容
+
+\formsubsubheading{2.2 主题二}
+
+% TODO: 文献综述内容
+
+\formsubsubheading{2.3 研究现状评述}
+
+% TODO: 总结现有研究的不足，引出本研究的科学/技术问题
+
+\vspace{1em}
+\noindent{\zihao{-4}\heiti 参考文献}
+\vspace{4pt}
+
+{\zihao{-5}\printbibliography[heading=none]}
+
+\end{formbox}
+
+\clearpage
+
+%==================================================
+%  3、研究内容
+%==================================================
+\formheading{3、研究内容}
+\begin{formbox}
+
+\formsubheading{（1）主要研究内容}
+
+% TODO: 列出论文的主要研究内容（按篇章/模块展开）
+% 建议按逻辑递进列出 3~5 个研究部分，每个部分简要说明研究内容
+
+\writehere[7cm]
+
+\formsubheading{（2）拟解决的关键问题}
+
+% TODO: 凝练 2~4 个关键科学/技术问题
+
+\writehere[5cm]
+\end{formbox}
+
+\clearpage
+
+%==================================================
+%  4、主要创新点
+%==================================================
+\formheading{4、主要创新点}
+\begin{formbox}
+
+% TODO: 列出 2~4 个主要创新点，每个创新点建议包含：
+%   - 现有研究的不足
+%   - 本研究的创新之处
+%   - 创新的理论/实际意义
+
+% 示例格式：
+% （1）创新点标题。具体阐述……
+% （2）创新点标题。具体阐述……
+
+\end{formbox}
+
+\clearpage
+
+%==================================================
+%  5、研究方案
+%==================================================
+\formheading{5、研究方案}
+\begin{formbox}
+
+\formsubheading{（1）拟采取的研究方法}
+
+% TODO: 阐述拟采用的研究方法与技术手段
+
+\formsubheading{（2）技术路线}
+
+% TODO: 描述技术路线，可配合技术路线图
+% 插图示例：
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.85\textwidth]{figures/tech-roadmap}
+%   \caption{研究技术路线图}
+%   \label{fig:tech-roadmap}
+% \end{figure}
+
+\formsubheading{（3）可行性分析}
+
+% TODO: 从理论、技术、数据、研究基础等方面分析可行性
+
+\formsubheading{（4）预设研究中可能遇到的难点，并提出解决的方法和措施}
+
+% TODO: 列出潜在难点及对应的解决方案
+% 建议格式：
+%   {\bfseries 1）难点名称}\par
+%   {\bfseries 难点：}……\par
+%   {\bfseries 解决方法：}……\par
+
+\writehere[3cm]
+\end{formbox}
+
+\clearpage
+
+%==================================================
+%  6、研究基础
+%==================================================
+\formheading{6、研究基础}
+\begin{formbox}
+
+\formsubheading{（1）工作条件评估}
+
+\topicnote{（科学评估工作条件，包括自己的专业知识积累、现有的科研和实验条件，估算论文工作量，协助导师具体指导的人员情况（导师组）等）}
+
+% TODO: 从以下方面阐述工作条件：
+%   1) 专业知识积累
+%   2) 科研与实验条件
+%   3) 论文工作量估算
+%   4) 导师组及协助指导人员情况
+
+\formsubheading{（2）经费预算}
+\topicnote{（包含经费来源、开支预算）}
+
+% TODO: 填写经费来源说明
+\formsubsubheading{1）经费来源}
+
+% TODO: 说明经费来源
+
+\formsubsubheading{2）开支预算}
+
+% 开支预算表格模板（按需修改项目和金额）
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\setlength{\tabcolsep}{6pt}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{2.2cm}|}
+\hline
+\textbf{开支项目} & \textbf{主要用途} & \textbf{金额（元）} \\
+\hline
+调研差旅费 & & \\
+\hline
+数据收集与处理费 & & \\
+\hline
+ & & \\
+\hline
+\textbf{总计} & & \textbf{} \\
+\hline
+\end{tabularx}
+\end{center}
+
+\writehere[5cm]
+\end{formbox}
+
+\clearpage
+
+%==================================================
+%  7、学位论文工作计划（本节本身就是表格，不需要 formbox 外框）
+%==================================================
+\formheading{7、学位论文工作计划}
+
+\vspace{0.3cm}
+
+\renewcommand{\arraystretch}{1.4}
+\setlength{\tabcolsep}{4pt}
+\noindent
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{3cm}|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
+\hline
+\textbf{起讫日期} & \textbf{主要研究内容} & \textbf{预期目标} & \textbf{预期成果及形式} \\
+\hline
+ & & & \\
+\hline
+ & & & \\
+\hline
+ & & & \\
+\hline
+ & & & \\
+\hline
+ & & & \\
+\hline
+\end{tabularx}
+
+\vspace{0.3cm}
+
+{\zihao{5}\color{gray!50!black}注：表格行数不够时可自行添加。}
+
+%==================================================
+%  8、导师的意见（单独一页）
+%==================================================
+\clearpage
+\formheading{8、导师的意见}
+\begin{formboxfull}
+
+\topicnote{（导师须明确该题目是否属于本学科研究领域范畴，如属于交叉学科，则须明确交叉领域与本学科研究领域的具体关系；需要对选题依据、研究思路、研究内容和技术路线的科学性、可行性、先进性及创新性进行评价）}
+
+\vfill
+\vspace{10cm}
+
+\noindent\formlabel{导师是否能够提供学位论文工作所需的实验条件和研究经费保障：}\underline{\hspace{6em}}
+
+
+\noindent\formlabel{导师是否同意该博士生举行开题报告会：}\underline{\hspace{10em}}
+
+
+\noindent\formlabel{导师签字：}\underline
+
+\vspace{1.2cm}
+
+{\hspace{5em}}\hfill \proposalDate
+\end{formboxfull}
+
+\clearpage
+%==================================================
+%  9、点长意见（如学院设立点长）
+%==================================================
+\formheading{9、博士学位授权点点长对开题报告的意见}
+\begin{formboxfull}
+
+\topicnote{（如学院设立点长，请签署此项。重点指出文献综述是否进行了充分的凝练和概括，能否反映相关国内外的研究现状和概况，论文选择研究的科学或者技术问题是否清晰明确、是否具有学术价值或应用潜力，研究内容是否属于本学科研究领域或范畴，需要对选题依据、研究思路、研究内容和技术路线的科学性、可行性、先进性及创新性进行评价）}
+
+\vfill
+
+\vspace{16cm}
+
+\noindent\formlabel{点长是否同意该博士生举行开题报告会：}\underline{\hspace{10em}}
+\vspace{1.2cm}
+
+\noindent\formlabel{点长签字：}\underline{\hspace{5em}}\hfill \proposalDate
+\end{formboxfull}
+
+\clearpage
+%==================================================
+%  10、评审小组组成
+%==================================================
+\formheading{10、评审小组组成}
+
+\topicnote{（评审小组成员组成由学科带头人审核）}
+
+\vspace{0.3cm}
+
+{\zihao{5}
+\renewcommand{\arraystretch}{1.8}
+\setlength{\tabcolsep}{3pt}
+\noindent
+\begin{tabular}{|>{\centering\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{2.3cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2.4cm}|>{\centering\arraybackslash}p{3.4cm}|>{\centering\arraybackslash}p{2cm}|}
+\hline
+\textbf{组成} & \textbf{姓名} & \textbf{职称} & \textbf{学科\newline（专业）} & \textbf{工作单位\newline（本校专家不填）} & \textbf{签字} \\
+\hline
+组长 & & & & & \\
+\hline
+\multirow{4}{*}{成员} & & & & & \\
+\cline{2-6}
+ & & & & & \\
+\cline{2-6}
+ & & & & & \\
+\cline{2-6}
+ & & & & & \\
+\hline
+\end{tabular}}
+
+\vspace{0.8cm}
+
+\hfill\formlabel{审核人签字：}\underline{\hspace{5em}}
+
+%==================================================
+%  11、开题报告会记录
+%==================================================
+\formheading{11、开题报告会记录}
+\begin{formbox}
+
+\topicnote{（记录评审专家的质疑问题与研究生的回答要点，以及专家对选题的具体修改意见）}
+
+\writehere[100cm]
+
+\vspace{10cm}
+
+\noindent\formlabel{记录人签字：}\underline{\hspace{5em}} \hfill \proposalDate
+\end{formbox}
+
+%==================================================
+%  12、评审专家小组评议（单独一页）
+%==================================================
+\clearpage
+\formheading{12、评审专家小组对开题报告的评议}
+\begin{formboxfull}
+
+\formsubheading{（1）对选题依据、研究思路、研究内容和技术路线的科学性、可行性、先进性及创新性的评价}
+
+\vfill
+
+\vspace{4cm}
+
+\formsubheading{（2）存在的主要问题和改进措施}
+
+\vfill
+
+\vspace{4cm}
+
+\formsubheading{（3）评定结果}
+
+\vspace{0.2cm}
+
+\hspace{2em}$\square$~优秀（90$\sim$100分）\qquad $\square$~良好（80$\sim$89分）
+
+\vspace{0.2cm}
+
+\hspace{2em}$\square$~合格（60$\sim$79分）\qquad $\square$~不合格（60分以下）
+
+\vspace{0.4cm}
+
+\formsubheading{（4）评定结论}
+
+\vspace{0.2cm}
+
+\hspace{2em}$\square$~通过 \qquad $\square$~不通过，需要重新开题
+
+\vspace{0.8cm}
+
+\noindent 评审专家小组
+
+\vspace{0.3cm}
+
+\noindent\formlabel{组长签字：}\underline{\hspace{5em}}
+
+\vspace{0.3cm}
+
+\noindent\formlabel{成员签字：}\underline{\hspace{12em}}
+
+\vspace{0.3cm}
+
+\noindent\formlabel{秘书签字：}\underline{\hspace{5em}} \hfill \proposalDate
+\end{formboxfull}
+
+%==================================================
+%  附录：评分表（五号字，独立表格，不在 formbox 内）
+%==================================================
+\clearpage
+\begin{center}
+{\zihao{3}\fangsong 附：评审小组专家对博士研究生学位论文开题报告评分表}
+\end{center}
+
+\vspace{0.4cm}
+
+{\zihao{5}\fangsong
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\noindent
+\begin{tabularx}{\textwidth}{|p{2.4cm}|c|X|c|}
+\hline
+\textbf{评审项目} & \textbf{权重} & \textbf{评分标准} & \makecell{\textbf{得分}\\\textbf{(百分制)}} \\
+\hline
+\makecell[l]{一、选题依据\\(A)} & 20\% &
+\textbf{80$\sim$100分：}选题有很强的理论意义、实用价值，并预期将获得重大的经济效益和社会效益。
+\textbf{60$\sim$80分：}选题有较强的理论意义、实用价值，并预期获得较大的经济效益和社会效益。
+\textbf{60分以下：}选题缺乏理论意义和实用价值。 & \\
+\hline
+\makecell[l]{二、文献综述\\(B)} & 10\% &
+\textbf{80$\sim$100分：}查阅大量文献，报告内容能全面阐述该研究方向的现状和发展动态。
+\textbf{60$\sim$80分：}查阅一定量文献，报告内容基本跟踪该研究方向的现状和发展动态。
+\textbf{60分以下：}查阅少量文献，综述一般，未达到上述标准。 & \\
+\hline
+\makecell[l]{三、研究内容\\和技术路线\\(C)} & 20\% &
+\textbf{90$\sim$100分：}能够提出重要的科学问题，研究思路清晰，研究内容充实先进，技术路线科学、合理、有可行性。
+\textbf{80$\sim$90分：}能够提出比较重要的科学问题，研究思路较清晰，研究内容较充实，技术路线合理、有一定可行性。
+\textbf{60$\sim$80分：}能够提出科学问题，研究思路一般，研究内容尚可，技术路线有一定可行性，但有不确定可能。
+\textbf{60分以下：}未提出明确的科学问题，研究思路不清晰，研究内容不充分，技术路线缺乏可行性。 & \\
+\hline
+\makecell[l]{四、创新性\\(D)} & 30\% &
+\textbf{80$\sim$100分：}研究课题属本学科发展方向并居前沿位置，具有很强的创新性。
+\textbf{60$\sim$80分：}研究课题属本学科的发展方向，有自己独特的思考、具有一定的创新性。
+\textbf{60分以下：}研究课题归属不清，主要创新点不明显。 & \\
+\hline
+\makecell[l]{五、文字表达\\(E)} & 10\% &
+\textbf{80$\sim$100分：}条理清晰，分析严谨，文笔流畅。
+\textbf{60$\sim$80分：}条理较好，层次分明，文笔较流畅。
+\textbf{60分以下：}写作能力较差。 & \\
+\hline
+\makecell[l]{六、口头报告\\(F)} & 10\% &
+\textbf{80$\sim$100分：}基本概念明确，思路清晰、逻辑性强、表达清楚。
+\textbf{60$\sim$80分：}基本概念明确，思路基本清晰、层次较分明、表达较清楚。
+\textbf{60分以下：}基本概念和思路不清晰、逻辑混乱、表达不清楚。 & \\
+\hline
+\textbf{总分} & & \multicolumn{2}{l|}{总分 $= 0.2A + 0.1B + 0.2C + 0.3D + 0.1E + 0.1F$} \\
+\hline
+\end{tabularx}
+
+\vspace{0.5cm}
+
+\textbf{注：}此表可复印，每位评审专家在六项指标每一栏的最后一列内打分（百分制），所有评审表均装订入开题报告。
+}
+
+\end{document}
