@@ -1,0 +1,123 @@
+% =========================================================================
+% example.tex — beamerthemeDMU 主题骨架示例（内容均为占位文本）
+% 编译：latexmk -xelatex example.tex   （或 xelatex 跑两遍出目录/横幅定位）
+% =========================================================================
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage{booktabs}
+\usetheme{DMU}
+
+% 底部进度条条目名（英文逗号分隔，与 \section 顺序一致）
+\dmusetprogress{选题科学依据,已有研究不足,主要研究内容与创新点,所研究问题的难点}
+% 转场页副述（英文逗号分隔，与 \section 顺序一致；不配置则无副述行）
+\dmusetsectiondesc{选题依据副述占位,研究不足副述占位,内容与创新点副述占位,难点副述占位}
+
+\title{论文题目（在此填写）}
+\subtitle{硕士学位论文开题报告}
+\author{报告人：姓名 \and 导师：××× 教授}
+\institute{大连海事大学 · 交通运输工程学院}
+\date{2026 年 9 月 28 日 · 中国大连}
+
+% 每节自动插入过渡页（不需要时注释掉本行）
+\AtBeginSection[]{\frame{\sectionpage}}
+
+\begin{document}
+
+% 封面：coverframe = 保留横幅、隐藏进度条与页码
+\begin{coverframe}
+  \titlepage
+\end{coverframe}
+
+\begin{frame}{目录}
+  \begin{dmuoutline}
+    \dmuoutlineitem{选题科学依据}{一句话副述占位：研究背景与需求。}
+    \dmuoutlineitem{已有研究不足}{一句话副述占位：文献缺口。}
+    \dmuoutlineitem{主要研究内容与创新点}{一句话副述占位：模型与方法。}
+    \dmuoutlineitem{所研究问题的难点}{一句话副述占位：关键挑战。}
+  \end{dmuoutline}
+\end{frame}
+
+% -------------------------------------------------------------------------
+\section{选题科学依据}
+% -------------------------------------------------------------------------
+
+\begin{frame}{此页标题（占位）}
+  \begin{itemize}
+    \item 一级要点占位文本
+      \begin{itemize}
+        \item 二级要点占位文本
+          \begin{itemize}
+            \item 三级要点占位文本
+          \end{itemize}
+        \item 二级要点占位文本
+      \end{itemize}
+    \item 一级要点占位文本
+  \end{itemize}
+  \vskip2mm
+  \begin{block}{色块标题（占位）}
+    正文占位文本，替换为实际内容。
+  \end{block}
+\end{frame}
+
+% -------------------------------------------------------------------------
+\section{已有研究不足}
+% -------------------------------------------------------------------------
+
+\begin{frame}{此页标题（占位）}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{左侧色块（占位）}
+        \begin{itemize}
+          \item 要点占位文本
+          \item 要点占位文本
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{右侧色块（占位）}
+        \begin{itemize}
+          \item 要点占位文本
+          \item 要点占位文本
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -------------------------------------------------------------------------
+\section{主要研究内容与创新点}
+% -------------------------------------------------------------------------
+
+\begin{frame}{此页标题（占位）}
+  \begin{block}{表格样式（占位）}
+    \centering
+    \begin{tabular}{lll}
+      \toprule
+      列一 & 列二 & 列三 \\
+      \midrule
+      条目占位 & 条目占位 & 条目占位 \\
+      条目占位 & 条目占位 & 条目占位 \\
+      \bottomrule
+    \end{tabular}
+  \end{block}
+  \vskip2mm
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[dmuprimary!40, dashed, fill=dmuprimary!5, rounded corners]
+        (0,0) rectangle (5.2,2.4);
+      \node at (2.6,1.2) {\small 插图占位（\textbackslash includegraphics）};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% -------------------------------------------------------------------------
+\section{所研究问题的难点}
+% -------------------------------------------------------------------------
+
+\begin{frame}{此页标题（占位）}
+  \begin{enumerate}
+    \item 难点占位文本
+    \item 难点占位文本
+  \end{enumerate}
+\end{frame}
+
+\end{document}

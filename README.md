@@ -3,6 +3,13 @@
 基于《博士研究生开题、中期、预答辩、答辩相关表格（2022年版）》中的
 「1博士研究生学位论文开题报告.doc」制作，使用 XeLaTeX + ctexart + biblatex 还原原 Word 模板的全部排版要素。
 
+仓库包含两部分：
+
+| 目录 | 内容 | 编译 |
+|------|------|------|
+| `proposal.tex` 等（根目录） | 论文版开题报告（ctexart，A4 文档） | `latexmk -xelatex proposal.tex` |
+| `beamer-dmu/` | 汇报演示模板（Beamer 16:9 幻灯片） | `latexmk -xelatex example.tex`（见 [beamer-dmu/README.md](beamer-dmu/README.md)） |
+
 ## 特性
 
 - **完全还原**原 Word 模板的字体、字号、边框与表格结构
@@ -45,7 +52,8 @@ latexmk -xelatex proposal.tex
 ├── references.bib     文献库
 ├── figures/           图形目录
 ├── Makefile           编译自动化
-└── README.md          本文件
+├── README.md          本文件
+└── beamer-dmu/        Beamer 汇报演示模板（独立使用，见其 README）
 ```
 
 ## 填写指南
@@ -142,6 +150,22 @@ make && open proposal.pdf
 | 提示语 | 楷体 | 五号 (10.5pt) |
 | 评分表 | 宋体 | 五号 (10.5pt) |
 | 每节外框 | — | 1.5px solid #BFBFBF |
+
+## Beamer 汇报演示模板（beamer-dmu/）
+
+与论文版配套的开题/组会汇报幻灯片模板（16:9 XeLaTeX Beamer），视觉复刻学院 2026-09 版汇报 PPT：
+
+- 顶部深蓝横幅：校徽 + 行楷校名/院名字标（华文行楷 + Zapfino 文字排版）+ 白色分隔线
+- 目录页：callout 条目 = accent 大编号（自动）+ 深蓝标题 + 一句话副述
+- 转场页：居中 accent 大编号 + 短横线 + 深蓝标题 + 灰色斜体副述
+- 底部进度条：各节名导航，当前节白字高亮，右端页码
+
+```bash
+cd beamer-dmu
+latexmk -xelatex example.tex   # 需要 XeLaTeX；字体要求见 beamer-dmu/README.md
+```
+
+字体预览样张：`beamer-dmu/font-preview.pdf`（macOS 全部可用中文字体实排对比）。
 
 ## License
 
