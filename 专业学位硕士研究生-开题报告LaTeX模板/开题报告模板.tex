@@ -1,0 +1,311 @@
+% !TEX program = xelatex
+% =====================================================================
+% 大连海事大学硕士研究生学位论文开题报告（专业学位）
+% ---------------------------------------------------------------------
+% 由「附件1-专业学位硕士研究生学位论文开题报告（模板）.doc」转制的 LaTeX 模板。
+% 编译：xelatex 本文件，连续编译两遍（longtable 列宽需第二遍稳定）。
+%
+% 字体对应（逐元素取自 .doc 字体表）：
+%   封面标题            一号宋体加粗        （专业学位）       二号宋体加粗
+%   封面信息栏/研究生院制 三号宋体加粗        2019年1月          小四宋体加粗
+%   说明页标题          三号黑体（不加粗）   说明页正文         小四宋体
+%   表格节标题及 1/2/3 小标题、论文题目： 小三宋体加粗
+%   论文类型/课题来源行  小四宋体            参考文献表头       小四黑体（不加粗）
+%   研究计划表头        小四宋体（不加粗）   签名/日期/评审签名  四号宋体
+%   秘书签字及其年月日   小四宋体            评价区三行         四号仿宋（标签加粗）
+% 字体集随平台自动探测（macOS/Windows/Overleaf 均可编译，字形有微小差异）。
+%
+% 填写方法：
+%   1. 封面信息：只改「封面信息区」8 个宏的定义，封面与表格内论文题目自动同步
+%      （下划线不能换行；题目超过一行时请手动分两行或缩小字号）；
+%   2. 各节内容：删掉对应的 \ktblank 占位空白，直接在下方书写普通文本与列表；
+%   3. 参考文献：删除表格中的 30 行空白（对应原模板 30 行空表），
+%      改用 \ktref{...} 逐条填写，序号自动编号；
+%   4. 研究计划：复制 \ktsched{时间}{研究内容}{预期目标和预期效果} 增行；
+%   5. 注意：各节盒子内只写普通文本，勿放表格、大图等不可跨页内容
+%      （塞入超页高内容会 Overfull 报错）；
+%   6. 版面约定：「四、研究计划」与「五、指导教师意见」固定同页，
+%      「六、开题报告会记录」与「六、论文选题评价结果」固定同页。
+% =====================================================================
+\documentclass[a4paper,zihao=-4]{ctexart}
+
+% ---------- 页面：A4，上下 2.54cm，左右 2.5cm（对应原表格宽度） ----------
+\usepackage{geometry}
+\geometry{top=2.54cm,bottom=2.54cm,left=2.5cm,right=2.5cm}
+
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+\usepackage[most]{tcolorbox}
+
+\pagestyle{empty}% 原模板无页码
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+
+% ---------- 中文字体：优先用 Word for Mac 自带的 SimSun/SimHei/FangSong ----------
+% （本机 ctex 回退 macold 字体集，宋体=STSong、加粗还会被映射成黑体，与 Word 观感不符；
+%   Word 打开此 .doc 时正是用以下字体渲染，AutoFakeBold 对应 Word 的合成加粗）
+\newcommand{\wordfontdir}{/Applications/Microsoft Word.app/Contents/Resources/DFonts/}
+\IfFileExists{\wordfontdir Simsun.ttc}{
+  \setCJKmainfont{Simsun.ttc}[Path=\wordfontdir, AutoFakeBold=3.0]% 正文默认宋体（主字体槽位）
+  \setCJKfamilyfont{zhsong}{Simsun.ttc}[Path=\wordfontdir, AutoFakeBold=3.0]% \songti
+  \setCJKfamilyfont{zhhei}{SimHei.ttf}[Path=\wordfontdir]% \heiti
+  \setCJKfamilyfont{zhfs}{Fangsong.ttf}[Path=\wordfontdir, AutoFakeBold=3.0]% \fangsong
+}{
+  \IfFontExistsTF{Songti SC}
+    {\setCJKfamilyfont{zhsong}{Songti SC}[AutoFakeBold=3.0]}
+    {\setCJKfamilyfont{zhsong}{STSong}[AutoFakeBold=3.0]}
+  \setCJKfamilyfont{zhfs}{STFangsong}[AutoFakeBold=3.0]
+}
+
+% ---------- 表单盒子样式：直角、0.4pt 黑框、可跨页断行 ----------
+% 注意：不可加 enhanced 皮肤——enhanced+breakable 在盒子跨页后会静默丢失边框；
+% longtable 单元格不能跨页，故「文献综述」等长内容节用可断行盒子模拟表格行。
+\tcbset{
+  ktbox/.style={
+    breakable,
+    colback=white, colframe=black,
+    boxrule=0.4pt, arc=0mm,
+    left=6pt, right=6pt, top=6pt, bottom=6pt,
+    boxsep=0pt,
+    before skip=0pt, after skip=0pt,
+  }
+}
+% longtable 与相邻盒子边框无缝贴合（对应原模板同一张表的连续行）
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+
+% ---------- 常用命令 ----------
+% 节标题（小三宋体加粗，如「一、选题的科学依据」）
+\newcommand{\ktsection}[1]{\par{\zihao{-3}\bfseries #1}\par}
+% 节内小标题（小三宋体加粗，如「1、选题背景：……」）
+\newcommand{\ktsub}[1]{\par\medskip{\zihao{-3}\bfseries #1}\par\smallskip}
+% 填写区占位空白：按 1cm 逐行展开、可跨页断行（填写时删除）
+\ExplSyntaxOn
+\newcommand{\ktblank}[1]{\prg_replicate:nn{#1}{\par\begingroup\baselineskip1cm\relax\noindent\rule{0pt}{1cm}\par\endgroup}}
+\ExplSyntaxOff
+% 精确高度补齐空白（固定页末盒对齐页底用，随 \ktblank 一并删除）
+\newcommand{\ktpad}[1]{\par\begingroup\baselineskip#1\relax\noindent\rule{0pt}{#1}\par\endgroup}
+\newlength{\ktfieldblockw}
+% 封面信息行：标签列默认 4 字宽（两字标签以 \hfill 分散即空两字，冒号与四字标签对齐），
+% 类别（领域）用 6 字宽自然外凸（原模板即如此）；整块作为整体居中
+\newcommand{\ktfield}[3][4em]{\textbf{\zihao{3}\makebox[#1][s]{#2}：\underline{\makebox[\maxof{8.5cm}{\widthof{#3}}][c]{#3}}}\par\vspace{0.6em}}
+% 参考文献自动编号行
+\newcounter{ktnref}
+\newcommand{\ktref}[1]{\stepcounter{ktnref}\thektnref & #1 \\ \hline}
+% 研究计划行（单元格最小高约 2.5cm，对应原模板空白大行）
+\newcommand{\ktsched}[3]{#1\rule{0pt}{70pt} & #2 & #3 \\ \hline}
+% 右对齐签名行（整行右对齐、不折行）
+\newcommand{\ktsign}[1]{\par\vspace{0.5em}\noindent\makebox[\linewidth][r]{#1}\par}
+
+% ================= 封面信息区（唯一需要修改的地方） =================
+\newcommand{\姓名}{}
+\newcommand{\学号}{}
+\newcommand{\学院}{}
+\newcommand{\类别领域}{}
+\newcommand{\指导教师}{}
+\newcommand{\行业导师}{}
+\newcommand{\论文题目}{}
+\newcommand{\开题时间}{}
+% =====================================================================
+
+\begin{document}
+
+% ============================== 封面 ==============================
+\begin{titlepage}
+  \vspace*{2.5cm}
+  \begin{center}
+    {\zihao{1}\bfseries 大连海事大学硕士研究生}\\[1.2em]
+    {\zihao{1}\bfseries 学位论文开题报告}\\[1em]
+    {\zihao{2}\bfseries （专业学位）}
+  \end{center}
+  \vspace{4.5em}
+  {\centering
+  {\zihao{3}\global\ktfieldblockw=\dimexpr6em+1em+8.5cm\relax}%
+  \begin{minipage}{\ktfieldblockw}
+    \setlength{\parindent}{0pt}%
+    \ktfield{姓\hfill 名}{\姓名}%
+    \ktfield{学\hfill 号}{\学号}%
+    \ktfield{学\hfill 院}{\学院}%
+    \ktfield[6em]{类别（领域）}{\类别领域}%
+    \ktfield{指导教师}{\指导教师}%
+    \ktfield{行业导师}{\行业导师}%
+    \ktfield{论文题目}{\论文题目}%
+    \ktfield{开题时间}{\开题时间}%
+  \end{minipage}%
+  \par}
+  \vfill
+  \begin{center}
+    {\zihao{3}\bfseries 大连海事大学研究生院制}\\[0.8em]
+    {\zihao{-4}\bfseries 2019年1月}% 模板制版日期，保留原样
+  \end{center}
+\end{titlepage}
+
+% ======================= 填写说明及管理规定 =======================
+\begin{center}
+  {\zihao{3}\heiti 硕士研究生学位论文开题报告填写说明及管理规定}% 三号黑体
+\end{center}
+\medskip
+
+\par 硕士学位论文开题报告是做好学位论文的基础，为了完善硕士研究生过程质量监控体系，提高硕士研究生培养质量，要求在校硕士生应在第三学期结束前（两年毕业学院的硕士生应在第三学期前四周内完成）完成学位论文开题报告。
+
+\par 一、开题报告内容应分类清楚，归纳合理，科学技术问题凝练准确，语言规范，逻辑清晰。字数不少于 8000 字（其中文献综述 5000 字左右）；近五年的文献不少于总数的 1/3；
+
+\par 二、《硕士研究生学位论文开题报告》完成以后，应组织公开的学位论文开题报告会。
+
+\par 三、开题报告会由学院负责组织，学科具体实施。开题报告会根据研究生的研究方向和人数成立相应的开题报告考核小组，由 3～5 名具有高级技术职称的专家组成，其中至少有1名来自行（企）业的专家。每个小组设组长和秘书各 1 名，小组中至少 3 人是硕士研究生导师，申请人的导师不能作为考核小组成员。评审专家小组就开题的意义、文献综述、研究内容、可能遇到的问题、是否通过开题等写出结论性的审查意见，并将结果和相关材料留学院备案。
+
+\par 四、《硕士研究生学位论文开题报告》必须采用A4纸双面打印，左侧装订成册，各栏空格不够时，请自行加页。本表可在研究生院网站下载。
+
+\clearpage
+
+% ============================ 表单主体 ============================
+
+% ---------- 论文题目 ----------
+\begin{tcolorbox}[ktbox]
+  {\zihao{-3}\bfseries 论文题目：}\underline{\makebox[\maxof{\dimexpr\linewidth-8em-12pt\relax}{\widthof{\论文题目}}][c]{\论文题目}}
+\end{tcolorbox}
+
+% ---------- 论文类型 / 课题来源 ----------
+\begin{tcolorbox}[ktbox]
+  论文类型：（1）产品研发；（2）工程设计；（3）应用研究；（4）工程/项目管理；（5）调研报告；(6)其它
+
+  课题来源：（1）纵向课题；（2）横向课题；\hspace{1em}（3）自选课题；（4）其它
+\end{tcolorbox}
+
+% ---------- 一、选题的科学依据 ----------
+\begin{tcolorbox}[ktbox]
+  \ktsection{一、选题的科学依据}
+
+  \ktsub{1、选题背景：说明选题的理论依据和应用价值。}
+  \ktblank{8}% ← 填写选题背景内容，删除占位空白
+
+  \ktsub{2、文献综述：通过文献综述，阐述国内外的研究现状、发展趋势及存在的科学技术问题。}
+  \ktblank{14}% ← 填写文献综述（约 5000 字），删除占位空白
+
+  \ktsub{3、研究目的和意义：明确研究目的、选题的理论意义和职业应用前景。}
+  \ktblank{4}% ← 填写研究目的和意义，删除占位空白
+\end{tcolorbox}
+
+% ---------- 主要参考文献 ----------
+\begin{tcolorbox}[ktbox]
+  \ktsection{主要参考文献（近五年的参考文献不少于总数的1/3）}
+\end{tcolorbox}
+
+\setlength{\tabcolsep}{6pt}
+\newcolumntype{R}{>{\raggedright\arraybackslash}p{\dimexpr\linewidth-1.5cm-2\tabcolsep-3\arrayrulewidth\relax}}
+\newcolumntype{C}{>{\centering\arraybackslash}p{\dimexpr1.5cm-2\tabcolsep\relax}}
+\begin{longtable}{|C|R|}
+  \hline
+  \multicolumn{1}{|c|}{\heiti 序号} & \multicolumn{1}{c|}{\heiti 文献目录（作者、题目、刊物名、出版时间、页次）} \\% 表头小四黑体
+  \hline
+  \endfirsthead
+  \hline
+  \multicolumn{1}{|c|}{\heiti 序号} & \multicolumn{1}{c|}{\heiti 文献目录（作者、题目、刊物名、出版时间、页次）} \\
+  \hline
+  \endhead
+  \endfoot
+  \endlastfoot
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline
+  & \rule{0pt}{20pt} \\ \hline% ↑ 共 30 行空白，对应原模板
+\end{longtable}
+
+% ---------- 二、主要研究内容 + 三、研究方案（原模板同属一个单元格） ----------
+\begin{tcolorbox}[ktbox]
+  \ktsection{二、主要研究内容及拟解决的关键问题。}
+  \ktblank{10}
+  \ktpad{1.5mm}% ← 填写研究内容与关键问题，删除占位空白
+
+  \ktsection{三、研究方案：包括拟采取的研究方法、技术路线、可行性分析。}
+  \ktblank{19}
+  \ktpad{7mm}% ← 填写研究方案，删除占位空白
+\end{tcolorbox}
+
+% ================== 四、研究计划 + 五、指导教师意见（固定同页） ==================
+\clearpage
+
+\begin{tcolorbox}[ktbox]
+  \ktsection{四、研究计划：包括进度安排、内容、预期目标和预期结果}
+\end{tcolorbox}
+
+\newcolumntype{T}{>{\centering\arraybackslash}p{\dimexpr2.5cm-2\tabcolsep\relax}}
+\newcolumntype{N}{>{\raggedright\arraybackslash}p{\dimexpr7.1cm-2\tabcolsep\relax}}
+\newcolumntype{M}{>{\raggedright\arraybackslash}p{\dimexpr\linewidth-2.5cm-7.1cm-2\tabcolsep-4\arrayrulewidth\relax}}
+\begin{longtable}{|T|N|M|}
+  \hline
+  \multicolumn{1}{|c|}{时间} & \multicolumn{1}{c|}{研究内容} & \multicolumn{1}{c|}{预期目标和预期效果} \\
+  \hline
+  \endfirsthead
+  \hline
+  \multicolumn{1}{|c|}{时间} & \multicolumn{1}{c|}{研究内容} & \multicolumn{1}{c|}{预期目标和预期效果} \\
+  \hline
+  \endhead
+  \endfoot
+  \endlastfoot
+  \ktsched{}{}{}% ← 复制本行增行，如：\ktsched{2026.09--2026.12}{文献调研与模型构建}{完成综述与初步模型}
+\end{longtable}
+
+\begin{tcolorbox}[ktbox]
+  \ktsection{五、指导教师意见}
+  \ktblank{16}
+  \ktpad{1.26cm}% ← 导师填写意见，删除占位空白
+  \ktsign{\zihao{4}签名：\underline{\makebox[4cm][c]{}}\hspace{2em}}
+  \ktsign{\zihao{4}日期：\hspace{1.5em}年\hspace{1.5em}月\hspace{1.5em}日}
+  \vspace{0.5em}
+\end{tcolorbox}
+
+% ============ 六、开题报告会记录 + 六、论文选题评价结果（固定同页） ============
+\clearpage
+
+\begin{tcolorbox}[ktbox]
+  {\zihao{-3}\bfseries 六、开题报告会记录}（着重记录评审专家的质疑问题与研究生的回答要点，以及专家对选题的具体修改意见）
+  \ktblank{7}% ← 填写报告会记录，删除占位空白
+  \ktsign{\zihao{-4}答辩委员会秘书签字：\underline{\makebox[3.5cm][c]{}}\hspace{2em}}
+  \ktsign{\zihao{-4}年\hspace{2em}月\hspace{2em}日}
+  \vspace{0.5em}
+\end{tcolorbox}
+
+% ---------- 六、论文选题评价结果（原文即编号两个「六」，保留原样） ----------
+\begin{tcolorbox}[ktbox]
+  {\zihao{-3}\bfseries 六、论文选题评价结果}（请评审专家在相应等级后的“（ ）”内打“√”，并给出评语，重点审查与论证论文选题的实践价值与职业应用前景、研究框架和方法的可操作性与可行性、研究内容的实用性、能否取得具有实际应用价值的预期成果等内容，明确指出开题报告中存在的不足和问题，并提出改进意见。）
+
+  {\fangsong\zihao{4}\textbf{评价结果：}通过（\hspace{1.5em}）；\hspace{1em}修改后通过（\hspace{1.5em}）；\hspace{1em}不通过（\hspace{1.5em}）；\par}% 评价区四号仿宋
+  {\fangsong\zihao{4}评价等级：优秀（\hspace{1.5em}）良好（\hspace{1.5em}）一般（\hspace{1.5em}）；\par}
+  {\fangsong\zihao{4}\textbf{评\hspace{2em}语：}\par}
+  \ktblank{5}
+  \ktpad{5.2mm}% ← 评审专家填写评语，删除占位空白
+  \ktsign{\zihao{4}评审专家小组签名：组长\underline{\makebox[3.5cm][c]{}}}
+  \ktsign{\zihao{4}成员\underline{\makebox[2.5cm][c]{}}\hspace{1em}\underline{\makebox[2.5cm][c]{}}\hspace{1em}\underline{\makebox[2.5cm][c]{}}\hspace{1em}\underline{\makebox[2.5cm][c]{}}}
+  \ktsign{\zihao{4}时间：\hspace{1.5em}年\hspace{1em}月\hspace{1em}日}
+  \vspace{0.5em}
+\end{tcolorbox}
+
+\end{document}
